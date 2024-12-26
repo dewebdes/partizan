@@ -61,6 +61,29 @@ Follow the prompts to input the hostname you want to analyze.
 - **browser.js**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
 - **packet-min.js**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 
+### packet-min.js
+
+`packet-min.js` is designed for in-depth network packet analysis, focusing on processing and minimizing network packets to identify unique and potentially harmful requests.
+
+#### Key Features:
+
+- **Packet Logging**: Logs all HTTP and HTTPS requests and responses, capturing packet details for analysis.
+- **Packet Minimization**: Analyzes logged packets to filter out duplicates and irrelevant data.
+- **Detailed Reporting**: Generates a detailed report of minimized packets, highlighting any suspicious activity.
+- **Integration with browser.js**: Enhances the overall security analysis when used with `browser.js`.
+
+#### Example Usage
+
+```bash
+node packet-min.js
+```
+
+#### Core Functions:
+
+1. **Log and Minimize Packets**: Captures network packets during browsing sessions, filters out duplicates, and focuses on unique requests.
+2. **Detailed Packet Analysis**: Analyzes minimized packets for security threats and highlights suspicious patterns.
+3. **Report Generation**: Creates a detailed report of analyzed packets, providing insights and recommendations.
+
 ## Contributing
 
 We welcome contributions to Partizan. Please read the [contributing guidelines](CONTRIBUTING.md) to get started.
@@ -74,6 +97,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to all contributors and the community for their support.
 ```
 
-This update includes both `browser.js` and `packet-min.js`, giving clear descriptions of each file's purpose.
-
-Let me know if there's anything else you'd like to adjust or add! 😊
+This update includes comprehensive details about both `browser.js` and `packet-min.js`, highlighting their functionalities and usage. Let me know if there's anything else you'd like to adjust or add! 😊
