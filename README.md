@@ -3,7 +3,7 @@
 <br>
 <strong align="center"># Partizan</strong>
 </p>
-**Partizan** refers to a member of an armed group formed to fight secretly against an occupying force, often associated with resistance movements and guerrilla warfare. The term embodies the spirit of independence, resistance, and resourcefulness.
+**<u><b>Partizan</b></u>** refers to a member of an armed group formed to fight secretly against an occupying force, often associated with resistance movements and guerrilla warfare. The term embodies the spirit of independence, resistance, and resourcefulness.
 
 Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
 
