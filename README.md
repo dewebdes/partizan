@@ -102,3 +102,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Inspiration**: This project is inspired by the relentless spirit of independence and resistance, embodied by the Parthian Empire and resistance movements throughout history.
 - **Tools and Libraries**: We acknowledge the use of various open-source tools and libraries, including Playwright, node-fetch, prompt-sync, and string-similarity, which have been instrumental in the development of Partizan.
 
+## Demo Video
+
+For a comprehensive demo and walkthrough, watch our video on YouTube: [Partizan Security Tool: Comprehensive Demo and Walkthrough](https://www.youtube.com/watch?v=HcKkYQ5fQf0)
