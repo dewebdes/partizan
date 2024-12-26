@@ -1,21 +1,23 @@
 {
-    "name": "partizan",
-    "version": "1.0.0",
-    "description": "Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications, with comprehensive network packet analysis.",
-    "main": "browser.js",
-    "scripts": {
-      "start": "node browser.js",
-      "packet": "node packet-min.js"
-    },
-    "author": [
-      "eynikave",
-      "copilot (Your AI Companion)"
-    ],
-    "license": "MIT",
-    "dependencies": {
-      "playwright": "^1.28.0",
-      "node-fetch": "^2.6.1"
-    },
-    "devDependencies": {}
-  }
-  
+  "name": "partizan",
+  "version": "1.0.0",
+  "description": "Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications, with comprehensive network packet analysis.",
+  "main": "browser.js",
+  "type": "module",
+  "scripts": {
+    "start": "node browser.js",
+    "packet": "node packet-min.js"
+  },
+  "author": [
+    "eynikave",
+    "copilot (Your AI Companion)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "playwright": "^1.49.1",
+    "prompt-sync": "^4.2.0",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {}
+}
