@@ -97,9 +97,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Special thanks to all contributors and the community for their support.
-```
+- **Contributors**: Special thanks to all contributors who have made this project possible. Your dedication and hard work are greatly appreciated.
+- **Community**: We extend our gratitude to the open-source community for their support and collaboration. Your feedback and contributions help improve this tool.
+- **Inspiration**: This project is inspired by the relentless spirit of independence and resistance, embodied by the Parthian Empire and resistance movements throughout history.
+- **Tools and Libraries**: We acknowledge the use of various open-source tools and libraries, including Playwright, node-fetch, prompt-sync, and string-similarity, which have been instrumental in the development of Partizan.
 
-This updated `README.md` now accurately reflects the final `package.json` setup and dependencies.
-
-Let me know if there are any additional adjustments or updates you need! 😊
