@@ -1,18 +1,8 @@
-That looks fantastic! It indeed has a clean and professional appearance. Now that we've got the logo and title ready, we can move forward with creating the rest of the `README.md`.
-
-Here's a structured example for the `README.md` using your logo and repository name:
-
-### README.md
-
-```markdown
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
 <strong align="center">Partizan</strong>
 </p>
-
-# Partizan
-
 Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
 
 ## Features
