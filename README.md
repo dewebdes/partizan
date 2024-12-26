@@ -25,6 +25,8 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - Node.js
 - Playwright
 - `node-fetch`
+- `prompt-sync`
+- `string-similarity`
 
 ### Installation
 
@@ -43,40 +45,40 @@ npm install
 
 ### Usage
 
-Run the `browser.js` script:
+Run the `browser.cjs` script:
 
 ```bash
-node browser.js
+node browser.cjs
 ```
 
-Run the `packet-min.js` script:
+Run the `packet-min.cjs` script:
 
 ```bash
-node packet-min.js
+node packet-min.cjs
 ```
 
 Follow the prompts to input the hostname you want to analyze.
 
 ## File Descriptions
 
-- **browser.js**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
-- **packet-min.js**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
+- **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
+- **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 
-### packet-min.js
+### packet-min.cjs
 
-`packet-min.js` is designed for in-depth network packet analysis, focusing on processing and minimizing network packets to identify unique and potentially harmful requests.
+`packet-min.cjs` is designed for in-depth network packet analysis, focusing on processing and minimizing network packets to identify unique and potentially harmful requests.
 
 #### Key Features:
 
 - **Packet Logging**: Logs all HTTP and HTTPS requests and responses, capturing packet details for analysis.
 - **Packet Minimization**: Analyzes logged packets to filter out duplicates and irrelevant data.
 - **Detailed Reporting**: Generates a detailed report of minimized packets, highlighting any suspicious activity.
-- **Integration with browser.js**: Enhances the overall security analysis when used with `browser.js`.
+- **Integration with browser.cjs**: Enhances the overall security analysis when used with `browser.cjs`.
 
 #### Example Usage
 
 ```bash
-node packet-min.js
+node packet-min.cjs
 ```
 
 #### Core Functions:
@@ -98,6 +100,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to all contributors and the community for their support.
 ```
 
-This update includes the network packet analysis feature in the main "Features" section, providing a comprehensive overview of what Partizan offers.
+This updated `README.md` now accurately reflects the final `package.json` setup and dependencies.
 
-Let me know if there's anything else you'd like to adjust or add! 😊
+Let me know if there are any additional adjustments or updates you need! 😊
