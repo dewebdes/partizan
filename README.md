@@ -1,3 +1,8 @@
+Understood! Here's the updated `README.md` with an additional feature about `packet-min.js` in the main "Features" section:
+
+### README.md
+
+```markdown
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
@@ -16,6 +21,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
+- **Network Packet Analysis**: Logs, minimizes, and analyzes network packets to identify unique and potentially harmful requests.
 
 ## Getting Started
 
@@ -97,4 +103,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to all contributors and the community for their support.
 ```
 
-This update includes comprehensive details about both `browser.js` and `packet-min.js`, highlighting their functionalities and usage. Let me know if there's anything else you'd like to adjust or add! 😊
+This update includes the network packet analysis feature in the main "Features" section, providing a comprehensive overview of what Partizan offers.
+
+Let me know if there's anything else you'd like to adjust or add! 😊
