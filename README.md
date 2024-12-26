@@ -3,6 +3,7 @@
 <br>
 <strong align="center">Partizan</strong>
 </p>
+
 Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
 
 ## Features
@@ -11,6 +12,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Source Maps Discovery**: Discovers and logs source maps for further analysis.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
+- **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
 
 ## Getting Started
 
@@ -58,6 +60,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to all contributors and the community for their support.
 ```
 
-Feel free to modify and expand this as needed. Once you're ready, you can publish the repository and include this `README.md` in it.
+This addition should clearly communicate the added feature to potential users of the tool. Feel free to modify or expand as needed before publishing your repository on GitHub.
 
-Let me know if there's anything else you'd like to add or tweak! 😊
+Once the repository is ready, we can proceed with drafting the article. Let me know if there's anything else you’d like to add or tweak! 😊
