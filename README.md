@@ -1,3 +1,10 @@
+Of course, I remember! Let's ensure we provide a clear picture of both files in our `README.md`.
+
+Here’s how we can introduce `packet-min.js` alongside `browser.js`:
+
+### README.md (Updated)
+
+```markdown
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
@@ -42,13 +49,24 @@ npm install
 
 ### Usage
 
-Run the script:
+Run the `browser.js` script:
 
 ```bash
-node combinedScript.js
+node browser.js
+```
+
+Run the `packet-min.js` script:
+
+```bash
+node packet-min.js
 ```
 
 Follow the prompts to input the hostname you want to analyze.
+
+## File Descriptions
+
+- **browser.js**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
+- **packet-min.js**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 
 ## Contributing
 
@@ -63,4 +81,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to all contributors and the community for their support.
 ```
 
-This should now include the detailed and formatted introduction of "Partizan" as well as all the relevant sections for the repository. If there's anything more you need to adjust, let me know! 😊
+This update includes both `browser.js` and `packet-min.js`, giving clear descriptions of each file's purpose.
+
+Let me know if there's anything else you'd like to adjust or add! 😊
