@@ -1,16 +1,8 @@
-Absolutely! Let's include the historical context of the "Parti" Empire and how it relates to the term "Partizan". Here's the updated description:
-
-### README.md
-
-```markdown
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
 <strong align="center">Partizan</strong>
 </p>
-
-# Partizan
-
 **Partizan** refers to a member of an armed group formed to fight secretly against an occupying force, often associated with resistance movements and guerrilla warfare. The term has its roots in the **Parti Empire**, a powerful ancient civilization known for its strategic resistance and formidable warriors. The word embodies the spirit of independence, resistance, and resourcefulness.
 
 Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
