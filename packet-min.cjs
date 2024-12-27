@@ -1,96 +1,80 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
+const readline = require('readline');
 const prompt = require('prompt-sync')();
+let allParts = [];
 
-// Function to parse the HTTP packet
-async function parseHttpPacket(packet) {
-    const parts = packet.split('\r\n\r\n');
-    const headersPart = parts[0];
-    const bodyPart = parts[1] || '';
+let cookieString = '';
+let headers = [];
+let requestBody = '';
+let requestMethod = 'GET';
+let requestPath = '/';
+let host = '';
+let httpVersion = '';
 
-    const headersLines = headersPart.split('\r\n');
-    const requestLine = headersLines[0];
-    const headers = headersLines.slice(1);
+// Function to check if a value is null or empty
+function isNullOrEmpty(val) {
+    return val === null || val.trim() === '';
+}
 
-    // Extract the Host header value
-    const hostHeader = headers.find(header => header.startsWith('Host:'));
-    const host = hostHeader ? hostHeader.split(': ')[1] : 'example.com';
+// Function to read file content
+async function readFile(filename) {
+    return fs.promises.readFile(filename, 'utf8');
+}
 
-    // Parse query string parameters
-    const [method, requestPath, version] = requestLine.split(' ');
-    const protocol = 'https';  // Always use https for the protocol
-    const fullUrl = `${protocol}://${host}${requestPath}`;
-    const parsedUrl = new url.URL(fullUrl);
-    const queryParams = parsedUrl.searchParams;
+// Function to extract parts from the packet
+function extractParts() {
+    const queryParams = requestPath.split('?')[1]?.split('&') || [];
+    queryParams.forEach(param => {
+        const [name, value] = param.split('=');
+        allParts.push({ part: 'query', name, value, force: true });
+    });
 
-    // Parse POST body parameters (assuming JSON format)
-    let postBodyParams = {};
-    if (bodyPart.trim().startsWith('{')) {
-        try {
-            postBodyParams = JSON.parse(bodyPart);
-        } catch (error) {
-            console.error('Error parsing POST body as JSON:', error);
-        }
-    }
+    const cookies = cookieString.split(';');
+    cookies.forEach(cookie => {
+        const [name, value] = cookie.split('=');
+        const cookieValue = cookie.replace(name.trim() + '=', '');
+        allParts.push({ part: 'cookie', name: name.trim(), value: cookieValue, force: true });
+        console.log(`cookie: ${name.trim()} = ${cookieValue}`);
+    });
 
-    return {
-        method,
-        requestUrl: fullUrl,
-        version,
-        headers,
-        body: bodyPart,
-        queryParams,
-        postBodyParams
-    };
+    headers.forEach(header => {
+        allParts.push({ part: 'header', name: header.name, value: header.value, force: true });
+    });
 }
 
 // Function to send HTTP request and capture response status and length
-async function sendRequest(browser, method, requestUrl, headers, queryParams, cookies, body, totalRequests, currentRequest) {
-    // Ensure headers is always an array using JSON trick
-    headers = JSON.parse(JSON.stringify(headers));
-
-    // Calculate the progress percentage
-    const progress = ((currentRequest / totalRequests) * 100).toFixed(2);
-    console.log(`Sending request ${currentRequest + 1} of ${totalRequests}... Progress: ${progress}%`);
-
-    // Convert headers array to an object, ensure it has at least an empty object
-    const headersObject = {};
-    if (headers.length > 0) {
-        headers.forEach(header => {
-            const [key, value] = header.split(': ');
-            headersObject[key] = value;
-        });
-    }
+async function sendRequest(browser, method, requestUrl, headers, queryParams, cookies, body) {
+    const headersObject = headers.reduce((acc, header) => {
+        acc[header.name] = header.value;
+        return acc;
+    }, {});
 
     if (cookies.length > 0) {
         headersObject['Cookie'] = cookies.join('; ');
     }
 
-    const urlWithParams = new url.URL(requestUrl);
-    for (const [key, value] of queryParams) {
-        urlWithParams.searchParams.append(key, value);
-    }
-
-    const bodyContent = JSON.stringify(body);
-
-    const context = await browser.newContext({
-        ignoreHTTPSErrors: true  // Ignore HTTPS errors
+    const urlWithParams = new URL(requestUrl);
+    queryParams.forEach(param => {
+        urlWithParams.searchParams.append(param.name, param.value);
     });
+
+    const bodyContent = body !== 'null' ? body : '';
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
     const page = await context.newPage();
 
     let status;
     let length;
 
-    // Intercept the request and continue with custom headers and body
     await page.route('**/*', async route => {
         if (route.request().url() === urlWithParams.href) {
             const response = await page.request.fetch(route.request(), {
                 method,
                 headers: headersObject,
                 body: bodyContent,
-                maxRedirects: 0 // Do not follow redirects
+                maxRedirects: 0
             });
 
             status = response.status();
@@ -112,137 +96,162 @@ async function sendRequest(browser, method, requestUrl, headers, queryParams, co
     return { status, length };
 }
 
-// Function to test headers, query parameters, and POST body parameters
-async function testHeadersAndParams(browser, parsedPacket, originalStatus, originalLength) {
-    const { method, requestUrl, headers, queryParams, postBodyParams } = parsedPacket;
-    const essentialHeaders = [];
-    const essentialParams = [];
-    const essentialCookies = [];
-    const essentialBodyParams = [];
+// Function to test parts and determine essentials
+async function testParts(browser, originalStatus, originalLength) {
+    for (let i = 0; i < allParts.length; i++) {
+        let part = allParts[i];
+        part.force = false;
 
-    // Total number of tests to run
-    const totalTests = headers.length + [...queryParams.entries()].length + Object.keys(postBodyParams).length;
-    let currentTest = 0;
+        let headers = allParts.filter(p => p.part === 'header' && p.force).map(p => ({ name: p.name, value: p.value }));
+        let queryParams = allParts.filter(p => p.part === 'query' && p.force).map(p => ({ name: p.name, value: p.value }));
+        let cookies = allParts.filter(p => p.part === 'cookie' && p.force).map(p => `${p.name}=${p.value}`);
 
-    // Test headers
-    for (let i = 0; i < headers.length; i++) {
-        const testHeaders = headers.filter((_, index) => index !== i);
-        const response = await sendRequest(browser, method, requestUrl, testHeaders, queryParams, [], postBodyParams, totalTests, currentTest++);
-        if (response.status === originalStatus && response.length === originalLength) {
-            essentialHeaders.push(headers[i]);
+        const response = await sendRequest(
+            browser,
+            requestMethod,
+            `https://${host}${requestPath}`,
+            headers,
+            queryParams,
+            cookies,
+            requestBody
+        );
+
+        if (response.status !== originalStatus || response.length !== originalLength) {
+            part.force = true;
         }
-    }
 
-    // Test query parameters
-    for (const [key, value] of queryParams.entries()) {
-        const testParams = new url.URLSearchParams(queryParams);
-        testParams.delete(key);
-        const response = await sendRequest(browser, method, requestUrl, testParams, [], postBodyParams, totalTests, currentTest++);
-        if (response.status === originalStatus && response.length === originalLength) {
-            essentialParams.push([key, value]);
-        }
+        console.log(`Testing part ${i + 1}/${allParts.length}: ${part.name} = ${part.value} | force: ${part.force}`);
     }
-
-    // Test cookies
-    const cookieHeader = headers.find(header => header.startsWith('Cookie:'));
-    if (cookieHeader) {
-        const cookies = cookieHeader.split(': ')[1].split('; ');
-        for (let i = 0; i < cookies.length; i++) {
-            const testCookies = cookies.filter((_, index) => index !== i);
-            const testHeaders = headers.filter(header => !header.startsWith('Cookie:'));
-            const response = await sendRequest(browser, method, requestUrl, testHeaders, queryParams, testCookies, postBodyParams, totalTests, currentTest++);
-            if (response.status === originalStatus && response.length === originalLength) {
-                essentialCookies.push(cookies[i]);
-            }
-        }
-    }
-
-    // Test POST body parameters
-    for (const [key, value] of Object.entries(postBodyParams)) {
-        const testBodyParams = { ...postBodyParams };
-        delete testBodyParams[key];
-        const response = await sendRequest(browser, method, requestUrl, headers, queryParams, [], testBodyParams, totalTests, currentTest++);
-        if (response.status === originalStatus && response.length === originalLength) {
-            essentialBodyParams.push([key, value]);
-        }
-    }
-
-    return { essentialHeaders, essentialParams, essentialCookies, essentialBodyParams };
 }
 
 // Function to save minimized packet to file
-function saveMinimizedPacket(parsedPacket, essentials, originalFilename) {
-    const {
-        essentialHeaders,
-        essentialParams,
-        essentialCookies,
-        essentialBodyParams
-    } = essentials;
+function saveMinimizedPacket(filename) {
+    const essentialHeaders = allParts.filter(part => part.part === 'header' && part.force).map(part => `${part.name}: ${part.value}`).join('\r\n');
+    const essentialQueryParams = allParts.filter(part => part.part === 'query' && part.force).map(part => `${part.name}=${part.value}`).join('&');
+    const essentialCookies = allParts.filter(part => part.part === 'cookie' && part.force).map(part => `${part.name}=${part.value}`).join('; ');
+
+    console.log('Force parts:');
+    console.log('Headers:', essentialHeaders);
+    console.log('Query Params:', essentialQueryParams);
+    console.log('Cookies:', essentialCookies);
 
     const minimizedPacket = `
-${parsedPacket.method} ${parsedPacket.requestUrl} ${parsedPacket.version}
-${essentialHeaders.join('\r\n')}
+${requestMethod} ${requestPath.split('?')[0]}${essentialQueryParams ? '?' + essentialQueryParams : ''} ${httpVersion}
+Host: ${host}
+${essentialHeaders}
+${essentialCookies ? `Cookie: ${essentialCookies}` : ''}
 \r\n
-${JSON.stringify(Object.fromEntries(essentialParams))}
-${essentialCookies.length > 0 ? `Cookie: ${essentialCookies.join('; ')}` : ''}
-\r\n
-${JSON.stringify(Object.fromEntries(essentialBodyParams))}
+${requestBody !== 'null' ? requestBody : ''}
 `.trim();
 
-    const minimizedFilename = `Originalpacket-${path.basename(originalFilename)}-min`;
+    const minimizedFilename = `${path.basename(filename)}-min`;
     fs.writeFileSync(minimizedFilename, minimizedPacket);
     console.log(`Minimized packet saved to ${minimizedFilename}`);
 }
 
 // Main function to start Playwright and handle packet minimization
-(async () => {
-    const packetFilePath = prompt('Enter the HTTP packet file path: ');
-    const packet = fs.readFileSync(packetFilePath, 'utf8');
-    const parsedPacket = await parseHttpPacket(packet);
-
+(async function main() {
     const browser = await chromium.launch({
         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        headless: true, // Set to true if you don't need a browser UI
+        headless: true,
         args: [
-            '--proxy-server=http://192.168.189.131:8080' // Replace with your proxy server and port
+            '--no-sandbox',
+            '--proxy-server=http://192.168.189.131:8080',
+            '--ignore-certificate-errors'
         ]
     });
 
+    const page = await browser.newPage();
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    const packetFileName = await new Promise(resolve => {
+        rl.question("Enter the packet file name (default: packet): ", resolve);
+    });
+    rl.close();
+
+    const packet = await readFile(packetFileName);
+    const packetLines = packet.split('\r\n');
+    let startIndex = 2;
+    let endIndex = packetLines.length - 1;
+    for (let i = 0; i <= packetLines.length - 1; i++) {
+        if (isNullOrEmpty(packetLines[i].trim())) {
+            endIndex = i;
+        }
+    }
+
+    requestBody = 'null';
+    if (!isNullOrEmpty(packetLines[packetLines.length - 1])) {
+        requestBody = packetLines[packetLines.length - 1].trim();
+    }
+
+    requestMethod = 'GET';
+    let tempArray = packetLines[0].split(' ');
+    if (!isNullOrEmpty(tempArray[0])) {
+        requestMethod = tempArray[0].trim();
+    }
+
+    requestPath = '/';
+    tempArray = packetLines[0].split(' ');
+    if (!isNullOrEmpty(tempArray[1])) {
+        requestPath = tempArray[1].trim();
+        httpVersion = tempArray[2].trim();
+    }
+
+    host = '';
+    tempArray = packetLines[1].split(' ');
+    if (!isNullOrEmpty(tempArray[1])) {
+        host = tempArray[1].trim();
+    }
+
+    cookieString = 'null';
+    headers = [];
+
+    for (let j = startIndex; j <= endIndex - 1; j++) {
+        const line = packetLines[j];
+        if (!isNullOrEmpty(line)) {
+            const parts = line.split(':');
+            try {
+                const headerName = parts[0].trim();
+                const headerValue = line.replace(headerName + ":", "").trim();
+                if (headerName.toLowerCase() === 'cookie') {
+                    cookieString = headerValue;
+                } else {
+                    headers.push({ name: headerName, value: headerValue });
+                }
+            } catch (ex) {
+                console.log("Error:\n" + line);
+            }
+        }
+    }
+
+    console.log(`Sending original request: ${requestMethod} https://${host}${requestPath}`);
+
+    // Sending the original request to capture the initial response
     const originalResponse = await sendRequest(
         browser,
-        parsedPacket.method,
-        parsedPacket.requestUrl,
-        parsedPacket.headers,
-        parsedPacket.queryParams,
+        requestMethod,
+        `https://${host}${requestPath}`,
+        headers,
         [],
-        parsedPacket.postBodyParams,
-        1, 0
+        [],
+        requestBody
     );
 
     console.log('Original Packet Response:');
     console.log(`Status: ${originalResponse.status}`);
     console.log(`Length: ${originalResponse.length}`);
 
-    const confirmation = prompt('Do you want to continue with the minimization process? (yes/no): ');
-    if (confirmation.toLowerCase() !== 'yes') {
-        console.log('Process aborted by user.');
-        await browser.close();
-        return;
-    }
+    extractParts();
 
-    const { essentialHeaders, essentialParams, essentialCookies, essentialBodyParams } = await testHeadersAndParams(
-        browser,
-        parsedPacket,
-        originalResponse.status,
-        originalResponse.length
-    );
+    // Test parts and determine essentials
+    await testParts(browser, originalResponse.status, originalResponse.length);
 
-    console.log('Essential Headers:', essentialHeaders);
-    console.log('Essential Query Params:', essentialParams);
-    console.log('Essential Cookies:', essentialCookies);
-    console.log('Essential Body Params:', essentialBodyParams);
-
-    saveMinimizedPacket(parsedPacket, { essentialHeaders, essentialParams, essentialCookies, essentialBodyParams }, packetFilePath);
+    // Save minimized packet
+    saveMinimizedPacket(packetFileName);
 
     await browser.close();
 })();
