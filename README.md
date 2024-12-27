@@ -106,3 +106,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - For a comprehensive demo and walkthrough, watch our first video on YouTube: [Partizan Security Tool: Comprehensive Demo and Walkthrough](https://www.youtube.com/watch?v=HcKkYQ5fQf0).
 - For the section where we get the URL list and more insights: [Partizan URL List Extraction](https://www.youtube.com/watch?v=i9bc1VABbHw).
+
+<hr>
+<a href="https://www.linkedin.com/posts/eyni-kave_web-hacking-via-copilot-ai-activity-7278260944256790530-lHp-">
+<img src="https://github.com/dewebdes/partizan/blob/main/image/poster-3.jpg">
+</a>
