@@ -59,6 +59,7 @@ node packet-min.cjs
 
 Follow the prompts to input the hostname you want to analyze.
 
+
 ### Source Customization
 
 You can customize the Partizan tool by setting specific paths and proxies. Here's how:
@@ -75,6 +76,11 @@ You can customize the Partizan tool by setting specific paths and proxies. Here'
    const browser = await playwright.chromium.launch({
        args: ['--proxy-server=http://192.168.189.131:8080']
    });
+   ```
+
+For detailed guidance on proxy configuration, including cloud worker base proxies, you can refer to this [proxy-guide](https://www.linkedin.com/posts/eyni-kave_aevagp-aewaeq-aetaevaezaetaepaeuaev-activity-7273419725672464384-Vs7e).
+
+Feel free to modify these settings based on your specific requirements.
 
 ## File Descriptions
 
