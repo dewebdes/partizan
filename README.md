@@ -59,6 +59,23 @@ node packet-min.cjs
 
 Follow the prompts to input the hostname you want to analyze.
 
+### Source Customization
+
+You can customize the Partizan tool by setting specific paths and proxies. Here's how:
+
+1. **Chrome Path**: To set the path for Chrome, use the following example:
+   ```javascript
+   const browser = await playwright.chromium.launch({
+       executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+   });
+   ```
+
+2. **Proxy Configuration**: To configure a proxy, use the following example:
+   ```javascript
+   const browser = await playwright.chromium.launch({
+       args: ['--proxy-server=http://192.168.189.131:8080']
+   });
+
 ## File Descriptions
 
 - **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
