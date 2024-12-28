@@ -124,10 +124,14 @@ if (isMainThread) {
         console.log(`URLs have been saved to "urls.txt" in the "output" directory.`);
 
         if (sinkLog.length > 0) {
-            const sinkContent = sinkLog.map(log => `Detected "${log.sink}" in script: ${log.scriptUrl}\n`).join('\n');
+            const sinkContent = sinkLog.map(log => {
+                const cleanedUrl = log.scriptUrl.replace(`https://${hostname}`, '');
+                return `Detected "${log.sink}" in script: ${cleanedUrl}\n`;
+            }).join('\n');
             fs.appendFileSync(path.join(global.outputDir, 'dangerous_sinks.txt'), sinkContent, 'utf8');
             console.log(`Dangerous sinks have been saved to "dangerous_sinks.txt" in the "output" directory.`);
         }
+
 
         if (sourceMapLog.length > 0) {
             const sourceMapContent = sourceMapLog.map(log => `Discovered source map for script: ${log.scriptUrl}\nSource map URL: ${log.sourceMapUrl}\n`).join('\n');
