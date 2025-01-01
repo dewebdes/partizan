@@ -9,7 +9,7 @@ command sequence incorporating everything:
    ./mitmweb --set block_global=false --ssl-insecure -s multiproxy-injection-fat.py > /dev/null 2>&1
    ```
 
-1. Use `fallparams` to crawl the target URL and gather parameters:
+1. Use <a href='https://github.com/dewebdes/ZedAlert/blob/main/app/fallparams'>`fallparams`</a> to crawl the target URL and gather parameters:
    ```bash
    ./fallparams -u https://ctf.com/Search.aspx -crawl
    ```
