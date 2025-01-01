@@ -4,6 +4,11 @@ These will be invaluable for our SQLMap scan.
 
 command sequence incorporating everything:
 
+0. Run <a href="https://github.com/dewebdes/ZedAlert/blob/main/tools/fuzz/dns/multiproxy-injection-fat.py">MITM-CL</a> proxy:
+   ```bash
+   ./mitmweb --set block_global=false --ssl-insecure -s multiproxy-injection-fat.py > /dev/null 2>&1
+   ```
+
 1. Use `fallparams` to crawl the target URL and gather parameters:
    ```bash
    ./fallparams -u https://ctf.com/Search.aspx -crawl
