@@ -57,8 +57,13 @@ Run the `packet-min.cjs` script:
 node packet-min.cjs
 ```
 
-Follow the prompts to input the hostname you want to analyze.
+Run the `waf-ascii.cjs` script:
 
+```bash
+node waf-ascii.cjs
+```
+
+Follow the prompts to input the hostname you want to analyze.
 
 ### Source Customization
 
@@ -86,6 +91,7 @@ Feel free to modify these settings based on your specific requirements.
 
 - **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
 - **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
+- **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checks different encoding methods if a character is filtered.
 
 ### packet-min.cjs
 
