@@ -13,6 +13,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 
 - **Dangerous Sinks Detection**: Automatically identifies and logs potentially dangerous code snippets.
 - **Source Maps Discovery**: Discovers and logs source maps for further analysis.
+- **WAF ASCII Filtering Detection**: Identifies filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
@@ -91,7 +92,7 @@ Feel free to modify these settings based on your specific requirements.
 
 - **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
 - **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
-- **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checks different encoding methods if a character is filtered.
+- **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 
 ### packet-min.cjs
 
@@ -110,11 +111,21 @@ Feel free to modify these settings based on your specific requirements.
 node packet-min.cjs
 ```
 
-#### Core Functions:
+### waf-ascii.cjs
 
-1. **Log and Minimize Packets**: Captures network packets during browsing sessions, filters out duplicates, and focuses on unique requests.
-2. **Detailed Packet Analysis**: Analyzes minimized packets for security threats and highlights suspicious patterns.
-3. **Report Generation**: Creates a detailed report of analyzed packets, providing insights and recommendations.
+`waf-ascii.cjs` is designed to detect filtered ASCII characters in web application firewalls (WAF) by fuzzing query parameters. It tests various encoding methods to identify which characters are filtered and logs detailed results.
+
+#### Key Features:
+
+- **Filtered ASCII Detection**: Identifies which ASCII characters are filtered by the WAF.
+- **Encoding Tests**: Checks URL encoding, double URL encoding, and HTML encoding if a character is filtered.
+- **Detailed Reporting**: Provides a detailed CSV report of filtered characters and their encoding results.
+
+#### Example Usage
+
+```bash
+node waf-ascii.cjs
+```
 
 ## Contributing
 
