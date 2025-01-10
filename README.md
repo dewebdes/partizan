@@ -17,6 +17,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Source Maps Discovery**: Discovers and logs source maps for further analysis.
 - **WAF ASCII Filtering Detection**: Identifies filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **WAF Rule Detection**: Uses URL shortening to identify points where WAF rules/regex might block requests.
+- **DOM XSS Detection**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
@@ -73,6 +74,12 @@ Run the `checkUrl.cjs` script for WAF rule detection and URL shortening analysis
 node checkUrl.cjs
 ```
 
+Run the `dom_xss_detector.cjs` script for DOM XSS detection:
+
+```bash
+node dom_xss_detector.cjs
+```
+
 Follow the prompts to input the hostname or URL you want to analyze. As part of our **NARROW-RECON** approach, these scripts focus on pinpointing critical security vulnerabilities efficiently.
 
 ### Source Customization
@@ -103,6 +110,7 @@ Feel free to modify these settings based on your specific requirements.
 - **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 - **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **checkUrl.cjs**: Identifies points where WAF rules/regex might block requests by using URL shortening and detects points that return a 500 status or are dropped by the WAF.
+- **dom_xss_detector.cjs**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
 
 ### packet-min.cjs
 
@@ -151,6 +159,23 @@ node waf-ascii.cjs
 
 ```bash
 node checkUrl.cjs
+```
+
+### dom_xss_detector.cjs
+
+`dom_xss_detector.cjs` is designed to identify DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
+
+#### Key Features:
+
+- **DOM XSS Detection**: Tests URL parameters for reflection in the page content to identify potential DOM-based XSS vulnerabilities.
+- **Random String Generation**: Uses random strings in URL parameters to accurately detect reflections.
+- **Chunked Testing**: Processes parameters in chunks to manage large sets of parameters efficiently.
+- **Detailed Reporting**: Logs the results of reflections for further analysis.
+
+#### Example Usage
+
+```bash
+node dom_xss_detector.cjs
 ```
 
 ## Contributing
