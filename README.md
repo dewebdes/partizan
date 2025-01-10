@@ -16,6 +16,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Key-Terms Detection**: Detects specified keywords in page dependencies and logs them separately.
 - **Source Maps Discovery**: Discovers and logs source maps for further analysis.
 - **WAF ASCII Filtering Detection**: Identifies filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
+- **WAF Rule Detection**: Uses URL shortening to identify points where WAF rules/regex might block requests.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
@@ -66,7 +67,13 @@ Run the `waf-ascii.cjs` script:
 node waf-ascii.cjs
 ```
 
-Follow the prompts to input the hostname you want to analyze.
+Run the `checkUrl.cjs` script:
+
+```bash
+node checkUrl.cjs
+```
+
+Follow the prompts to input the hostname or URL you want to analyze.
 
 ### Source Customization
 
@@ -95,6 +102,7 @@ Feel free to modify these settings based on your specific requirements.
 - **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection, key-terms detection, and source map discovery.
 - **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 - **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
+- **checkUrl.cjs**: Identifies points where WAF rules/regex might block requests by using URL shortening and detects points that return a 500 status or are dropped by the WAF.
 
 ### packet-min.cjs
 
@@ -127,6 +135,22 @@ node packet-min.cjs
 
 ```bash
 node waf-ascii.cjs
+```
+
+### checkUrl.cjs
+
+`checkUrl.cjs` is designed to identify points where WAF rules or regex might block requests by using URL shortening. It helps in detecting URLs that return a 500 status or are dropped by the WAF.
+
+#### Key Features:
+
+- **WAF Rule Detection**: Shortens the URL incrementally to identify points where WAF rules or regex might block requests.
+- **HTTP Status Detection**: Detects URLs that return a 500 status or are dropped by the WAF.
+- **Detailed Reporting**: Logs the results for further analysis.
+
+#### Example Usage
+
+```bash
+node checkUrl.cjs
 ```
 
 ## Contributing
