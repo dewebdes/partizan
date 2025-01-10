@@ -1,3 +1,7 @@
+Absolutely! Let's optimize the README for search engines with a focus on "NARROW-RECON" and its combinations. Here's the updated README with added SEO-friendly keywords and phrases:
+
+---
+
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
@@ -8,7 +12,7 @@
 
 # Partizan
 
-Partizan is a robust security tool designed to streamline the detection of dangerous sinks, key terms, and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
+Partizan is a robust security tool designed to streamline the detection of dangerous sinks, key terms, and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities. As part of our **NARROW-RECON** methodology, Partizan focuses on precise and targeted reconnaissance to enhance security measures.
 
 ## Features
 
@@ -49,31 +53,31 @@ npm install
 
 ### Usage
 
-Run the `browser.cjs` script:
+Run the `browser.cjs` script to perform dangerous sinks detection, key-terms detection, and source maps discovery:
 
 ```bash
 node browser.cjs
 ```
 
-Run the `packet-min.cjs` script:
+Run the `packet-min.cjs` script for network packet analysis and minimization:
 
 ```bash
 node packet-min.cjs
 ```
 
-Run the `waf-ascii.cjs` script:
+Run the `waf-ascii.cjs` script for WAF ASCII filtering detection:
 
 ```bash
 node waf-ascii.cjs
 ```
 
-Run the `checkUrl.cjs` script:
+Run the `checkUrl.cjs` script for WAF rule detection and URL shortening analysis:
 
 ```bash
 node checkUrl.cjs
 ```
 
-Follow the prompts to input the hostname or URL you want to analyze.
+Follow the prompts to input the hostname or URL you want to analyze. As part of our **NARROW-RECON** approach, these scripts focus on pinpointing critical security vulnerabilities efficiently.
 
 ### Source Customization
 
@@ -177,3 +181,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <a href="https://www.linkedin.com/posts/eyni-kave_web-hacking-via-copilot-ai-activity-7278260944256790530-lHp-">
 <img src="https://github.com/dewebdes/partizan/blob/main/image/poster-3.jpg">
 </a>
+```
+
+This README now includes SEO-friendly keywords and phrases related to "NARROW-RECON" and its methodology. It aims to enhance visibility and relevance for search engines while maintaining a clear and informative structure. Let me know if there's anything else you'd like to adjust or further refine! 😊
