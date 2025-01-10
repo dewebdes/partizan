@@ -1,7 +1,3 @@
-Absolutely! Let's optimize the README for search engines with a focus on "NARROW-RECON" and its combinations. Here's the updated README with added SEO-friendly keywords and phrases:
-
----
-
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
@@ -181,6 +177,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <a href="https://www.linkedin.com/posts/eyni-kave_web-hacking-via-copilot-ai-activity-7278260944256790530-lHp-">
 <img src="https://github.com/dewebdes/partizan/blob/main/image/poster-3.jpg">
 </a>
-```
-
-This README now includes SEO-friendly keywords and phrases related to "NARROW-RECON" and its methodology. It aims to enhance visibility and relevance for search engines while maintaining a clear and informative structure. Let me know if there's anything else you'd like to adjust or further refine! 😊
