@@ -3,15 +3,17 @@
 <br>
 <strong align="center"># Partizan</strong>
 </p>
+
 **<u><b>Partizan</b></u>** refers to a member of an armed group formed to fight secretly against an occupying force, often associated with resistance movements and guerrilla warfare. The term has its roots in the **Parthian Empire**, a powerful ancient civilization known for its strategic resistance and formidable warriors. The word embodies the spirit of independence, resistance, and resourcefulness.
 
 # Partizan
 
-Partizan is a robust security tool designed to streamline the detection of dangerous sinks and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
+Partizan is a robust security tool designed to streamline the detection of dangerous sinks, key terms, and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities.
 
 ## Features
 
 - **Dangerous Sinks Detection**: Automatically identifies and logs potentially dangerous code snippets.
+- **Key-Terms Detection**: Detects specified keywords in page dependencies and logs them separately.
 - **Source Maps Discovery**: Discovers and logs source maps for further analysis.
 - **WAF ASCII Filtering Detection**: Identifies filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
@@ -90,7 +92,7 @@ Feel free to modify these settings based on your specific requirements.
 
 ## File Descriptions
 
-- **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection and source map discovery.
+- **browser.cjs**: Handles the main browser automation tasks, including dangerous sink detection, key-terms detection, and source map discovery.
 - **packet-min.cjs**: Focuses on processing and minimizing network packets for detailed analysis and security checks.
 - **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 
