@@ -15,6 +15,17 @@ const dangerousSinks = [
     'document.implementation.createDocumentFragment', 'document.implementation.createNodeIterator', 'document.implementation.createTreeWalker'
 ];
 
+const keyTerms = [
+    'admin', 'password', 'secret', 'user', 'login', 'credentials', 'token', 'auth', 'access', 'account',
+    'session', 'root', 'secure', 'encryption', 'key', 'hash', 'certificate', 'https', 'private', 'public',
+    'verify', 'validate', 'database', 'sql', 'query', 'sensitive', 'protected', 'privileged', 'vault', 'backup',
+    'adminPanel', 'userManagement', 'tokenId', 'creditCard', 'socialSecurity', 'apiKey', 'jwt', 'csrf', 'xss',
+    'injection', 'exploit', 'vulnerability', 'malware', 'phishing', 'breach', 'compliance', 'regulation', 'identity',
+    'firewall', 'antivirus'
+];
+
+const userKeyTerms = new Set();
+
 const cleanOutputFolder = (folderPath) => {
     if (fs.existsSync(folderPath)) {
         fs.readdirSync(folderPath).forEach((file) => {
@@ -68,6 +79,15 @@ if (isMainThread) {
         }
     });
 
+    // Commented out the prompt for additional key terms
+    // rl.question('Would you like to add any custom key terms (comma-separated)? ', (termsAnswer) => {
+    //     if (termsAnswer.trim()) {
+    //         const customTerms = termsAnswer.split(',').map(term => term.trim());
+    //         addUserKeyTerms(customTerms);
+    //     }
+    //     startPlaywright(hostname);
+    // });
+
     const handleMinCommand = async (urlLineNumber) => {
         if (urlLineNumber < 1 || urlLineNumber > global.finalUrls.length) {
             console.log('Invalid line number.');
@@ -92,7 +112,7 @@ if (isMainThread) {
 
         worker.on('message', (message) => {
             if (message.type === 'save') {
-                saveLogsToFile(hostname, message.urlLog, message.sinkLog, message.sourceMapLog);
+                saveLogsToFile(hostname, message.urlLog, message.sinkLog, message.sourceMapLog, message.keyTermLog);
             } else if (message.type === 'debug_stop') {
                 console.log('Dangerous sink detected. Stopping application.');
                 worker.terminate();
@@ -101,7 +121,8 @@ if (isMainThread) {
         });
     };
 
-    const saveLogsToFile = (hostname, urlLog, sinkLog, sourceMapLog) => {
+    const saveLogsToFile = (hostname, urlLog, sinkLog, sourceMapLog, keyTermLog) => {
+        // Save URLs log
         const groupedUrls = groupUrls(urlLog);
         const finalUrls = calculateSimilarity(groupedUrls);
         let currentLength = 0;
@@ -123,6 +144,7 @@ if (isMainThread) {
         fs.writeFileSync(path.join(global.outputDir, 'urls.txt'), currentContent.trim(), 'utf8');
         console.log(`URLs have been saved to "urls.txt" in the "output" directory.`);
 
+        // Save dangerous sinks log
         if (sinkLog.length > 0) {
             const sinkContent = sinkLog.map(log => {
                 const cleanedUrl = log.scriptUrl.replace(`https://${hostname}`, '');
@@ -132,13 +154,23 @@ if (isMainThread) {
             console.log(`Dangerous sinks have been saved to "dangerous_sinks.txt" in the "output" directory.`);
         }
 
-
+        // Save source maps log
         if (sourceMapLog.length > 0) {
             const sourceMapContent = sourceMapLog.map(log => `Discovered source map for script: ${log.scriptUrl}\nSource map URL: ${log.sourceMapUrl}\n`).join('\n');
             fs.appendFileSync(path.join(global.outputDir, 'discovered_source_maps.txt'), sourceMapContent, 'utf8');
             console.log(`Source maps have been saved to "discovered_source_maps.txt" in the "output" directory.`);
         }
+
+        // Save key terms log
+        if (keyTermLog.length > 0) {
+            const keyTermContent = keyTermLog.map(log => `Detected "${log.term}" in resource: ${log.url}\n`).join('\n');
+            fs.appendFileSync(path.join(global.outputDir, 'key_terms.txt'), keyTermContent, 'utf8');
+            console.log(`Key terms have been saved to "key_terms.txt" in the "output" directory.`);
+        } else {
+            console.log('No key terms were detected during this session.');
+        }
     };
+
 
     const groupUrls = (urls) => {
         const groups = {};
@@ -185,6 +217,7 @@ if (isMainThread) {
     let requests = [];
     let sinkLog = [];
     let sourceMapLog = [];
+    let keyTermLog = [];
     const urlToRequestIndexMap = {};
 
     const removeProtocolAndHost = (url) => {
@@ -236,26 +269,11 @@ if (isMainThread) {
         const page = await context.newPage();
 
         const sourceMapSchemes = [
-            '{filename}.map',
-            '{filename}.js.map',
-            '{filename}.min.map',
-            '{filename}.min.js.map',
-            '{filename}-debug.map',
-            '{filename}.bundle.map',
-            '{filename}.bundle.js.map',
-            '{filename}.bundle.min.map',
-            '{filename}.bundle.min.js.map',
-            '{filename}-dev.map',
-            '{filename}-dev.js.map',
-            '{filename}-prod.map',
-            '{filename}.prod.map',
-            '{filename}.prod.js.map',
-            '{filename}.production.map',
-            '{filename}.production.js.map',
-            '{filename}.development.map',
-            '{filename}.development.js.map',
-            '{filename}.test.map',
-            '{filename}.test.js.map'
+            '{filename}.map', '{filename}.js.map', '{filename}.min.map', '{filename}.min.js.map', '{filename}-debug.map',
+            '{filename}.bundle.map', '{filename}.bundle.js.map', '{filename}.bundle.min.map', '{filename}.bundle.min.js.map',
+            '{filename}-dev.map', '{filename}-dev.js.map', '{filename}-prod.map', '{filename}.prod.map', '{filename}.prod.js.map',
+            '{filename}.production.map', '{filename}.production.js.map', '{filename}.development.map', '{filename}.development.js.map',
+            '{filename}.test.map', '{filename}.test.js.map'
         ];
 
         const isSourceMapAvailable = async (url) => {
@@ -306,9 +324,10 @@ if (isMainThread) {
                 urlLog.push({ url: strippedUrl, packetString });
                 urlToRequestIndexMap[strippedUrl] = requests.length - 1;
 
-                if (request.resourceType() === 'script') {
+                if (request.resourceType() === 'script' || request.resourceType() === 'document') {
                     request.response().then(async response => {
                         const content = await response.text();
+                        detectKeyTerms(content, request.url()); // Invoke detectKeyTerms here
                         dangerousSinks.forEach(sink => {
                             if (content.includes(sink)) {
                                 console.log(`Detected dangerous sink "${sink}" in ${request.url()}`);
@@ -353,16 +372,34 @@ if (isMainThread) {
         browser.on('disconnected', () => {
             console.log('Browser closed.');
             console.log('Playwright finished its tasks.');
-            parentPort.postMessage({ type: 'save', urlLog, requests, sinkLog, sourceMapLog, urlToRequestIndexMap }); // Send back the log and requests
+            parentPort.postMessage({ type: 'save', urlLog, requests, sinkLog, sourceMapLog, keyTermLog, urlToRequestIndexMap });
         });
 
         parentPort.on('message', (message) => {
             if (message === 'save') {
-                parentPort.postMessage({ type: 'save', urlLog, requests, sinkLog, sourceMapLog, urlToRequestIndexMap }); // Send back the log and requests
+                parentPort.postMessage({ type: 'save', urlLog, requests, sinkLog, sourceMapLog, keyTermLog, urlToRequestIndexMap });
             }
         });
 
     };
+
+
+    const addUserKeyTerms = (terms) => {
+        terms.forEach(term => userKeyTerms.add(term));
+    };
+
+    const detectKeyTerms = (content, url) => {
+        const allKeyTerms = new Set([...keyTerms, ...userKeyTerms]);
+        allKeyTerms.forEach(term => {
+            const regex = new RegExp(`${term}`, 'i'); // Case-insensitive search
+            if (regex.test(content)) {
+                console.log(`Detected keyword "${term}" in resource: ${url}`);
+                keyTermLog.push({ term, url });
+            }
+        });
+    };
+
+
 
     startPlaywright(workerData.hostname, workerData.outputDir).catch(err => console.error('Playwright error:', err));
 }
