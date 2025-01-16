@@ -111,20 +111,12 @@ You can add, modify, or remove payloads based on your specific requirements.
 
 #### Customizing Request Settings
 
-To customize the request settings, such as the number of workers, base delay, and proxy settings, you can modify the corresponding variables and configurations in the script:
+To customize the request settings, such as the number of workers, base delay, and ping delay, you can modify the following variables:
 
 ```javascript
 const numWorkers = 30; // Number of worker threads
 const baseDelay = 5000; // 5 seconds delay between requests
 const pingDelay = 3 * 1000 * 5; // 15 seconds interval for ping requests
-
-const captureResponseTime = async (url, proxy) => {
-    // Capture response time with the provided proxy
-};
-
-const sendDdosRequestWithoutWaiting = (url, proxy) => {
-    // Send DDoS request without waiting for a response
-};
 ```
 
 You can also configure the proxy settings to use different ports or hosts:
