@@ -18,6 +18,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **WAF ASCII Filtering Detection**: Identifies filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **WAF Rule Detection**: Uses URL shortening to identify points where WAF rules/regex might block requests.
 - **DOM XSS Detection**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
+- **DDoS Testing**: Simulates Distributed Denial-of-Service (DDoS) attacks and monitors target's response time.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
@@ -32,6 +33,10 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - `node-fetch`
 - `prompt-sync`
 - `string-similarity`
+- `axios`
+- `readline`
+- `fs`
+- `worker_threads`
 
 ### Installation
 
@@ -80,29 +85,56 @@ Run the `dom_xss_detector.cjs` script for DOM XSS detection:
 node dom_xss_detector.cjs
 ```
 
+Run the `ddos_tester.cjs` script for simulating DDoS attacks and monitoring target's response time:
+
+```bash
+node ddos_tester.cjs
+```
+
 Follow the prompts to input the hostname or URL you want to analyze. As part of our **NARROW-RECON** approach, these scripts focus on pinpointing critical security vulnerabilities efficiently.
 
-### Source Customization
+### DDoS Tester Customization
 
-You can customize the Partizan tool by setting specific paths and proxies. Here's how:
+You can customize the `ddos_tester.cjs` script by modifying the payloads and other settings.
 
-1. **Chrome Path**: To set the path for Chrome, use the following example:
-   ```javascript
-   const browser = await playwright.chromium.launch({
-       executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-   });
-   ```
+#### Customizing Payloads
 
-2. **Proxy Configuration**: To configure a proxy, use the following example:
-   ```javascript
-   const browser = await playwright.chromium.launch({
-       args: ['--proxy-server=http://192.168.189.131:8080']
-   });
-   ```
+To customize the payloads used in DDoS requests, you can edit the `payloads` array in the script:
+
+```javascript
+const payloads = [
+    // Add your custom payloads here
+];
+```
+
+You can add, modify, or remove payloads based on your specific requirements.
+
+#### Customizing Request Settings
+
+To customize the request settings, such as the number of workers, base delay, and proxy settings, you can modify the corresponding variables and configurations in the script:
+
+```javascript
+const numWorkers = 30; // Number of worker threads
+const baseDelay = 5000; // 5 seconds delay between requests
+const pingDelay = 3 * 1000 * 5; // 15 seconds interval for ping requests
+
+const captureResponseTime = async (url, proxy) => {
+    // Capture response time with the provided proxy
+};
+
+const sendDdosRequestWithoutWaiting = (url, proxy) => {
+    // Send DDoS request without waiting for a response
+};
+```
+
+You can also configure the proxy settings to use different ports or hosts:
+
+```javascript
+const originalResponseTime = await captureResponseTime(testURL, { host: '192.168.189.131', port: 8080 });
+const currentResponseTime = await captureResponseTime(`${testURL}&extra=${extraPayload}`, { host: '192.168.189.131', port: 8082 });
+```
 
 For detailed guidance on proxy configuration, including cloud worker base proxies, you can refer to this [proxy-guide](https://www.linkedin.com/posts/eyni-kave_aevagp-aewaeq-aetaevaezaetaepaeuaev-activity-7273419725672464384-Vs7e).
-
-Feel free to modify these settings based on your specific requirements.
 
 ## File Descriptions
 
@@ -111,72 +143,7 @@ Feel free to modify these settings based on your specific requirements.
 - **waf-ascii.cjs**: Detects filtered ASCII characters by fuzzing query parameters in web requests and checking different encoding methods if a character is filtered.
 - **checkUrl.cjs**: Identifies points where WAF rules/regex might block requests by using URL shortening and detects points that return a 500 status or are dropped by the WAF.
 - **dom_xss_detector.cjs**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
-
-### packet-min.cjs
-
-`packet-min.cjs` is designed for in-depth network packet analysis, focusing on processing and minimizing network packets to identify unique and potentially harmful requests.
-
-#### Key Features:
-
-- **Packet Logging**: Logs all HTTP and HTTPS requests and responses, capturing packet details for analysis.
-- **Packet Minimization**: Analyzes logged packets to filter out duplicates and irrelevant data.
-- **Detailed Reporting**: Generates a detailed report of minimized packets, highlighting any suspicious activity.
-- **Integration with browser.cjs**: Enhances the overall security analysis when used with `browser.cjs`.
-
-#### Example Usage
-
-```bash
-node packet-min.cjs
-```
-
-### waf-ascii.cjs
-
-`waf-ascii.cjs` is designed to detect filtered ASCII characters in web application firewalls (WAF) by fuzzing query parameters. It tests various encoding methods to identify which characters are filtered and logs detailed results.
-
-#### Key Features:
-
-- **Filtered ASCII Detection**: Identifies which ASCII characters are filtered by the WAF.
-- **Encoding Tests**: Checks URL encoding, double URL encoding, and HTML encoding if a character is filtered.
-- **Detailed Reporting**: Provides a detailed CSV report of filtered characters and their encoding results.
-
-#### Example Usage
-
-```bash
-node waf-ascii.cjs
-```
-
-### checkUrl.cjs
-
-`checkUrl.cjs` is designed to identify points where WAF rules or regex might block requests by using URL shortening. It helps in detecting URLs that return a 500 status or are dropped by the WAF.
-
-#### Key Features:
-
-- **WAF Rule Detection**: Shortens the URL incrementally to identify points where WAF rules or regex might block requests.
-- **HTTP Status Detection**: Detects URLs that return a 500 status or are dropped by the WAF.
-- **Detailed Reporting**: Logs the results for further analysis.
-
-#### Example Usage
-
-```bash
-node checkUrl.cjs
-```
-
-### dom_xss_detector.cjs
-
-`dom_xss_detector.cjs` is designed to identify DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
-
-#### Key Features:
-
-- **DOM XSS Detection**: Tests URL parameters for reflection in the page content to identify potential DOM-based XSS vulnerabilities.
-- **Random String Generation**: Uses random strings in URL parameters to accurately detect reflections.
-- **Chunked Testing**: Processes parameters in chunks to manage large sets of parameters efficiently.
-- **Detailed Reporting**: Logs the results of reflections for further analysis.
-
-#### Example Usage
-
-```bash
-node dom_xss_detector.cjs
-```
+- **ddos_tester.cjs**: Simulates DDoS attacks and monitors target's response time, providing detailed logs and customizable payloads.
 
 ## Contributing
 
