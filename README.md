@@ -23,6 +23,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
 - **Network Packet Analysis**: Logs, minimizes, and analyzes network packets to identify unique and potentially harmful requests.
+- **SpiderFoot Data Fetching**: Fetches data from SpiderFoot scans and organizes it into distinct log files as part of our **WIDE-RECON** approach.
 
 ## Getting Started
 
@@ -54,6 +55,8 @@ npm install
 ```
 
 ### Usage
+
+Follow the prompts to input the hostname or URL you want to analyze.
 
 Run the `browser.cjs` script to perform dangerous sinks detection, key-terms detection, and source maps discovery:
 
@@ -91,7 +94,11 @@ Run the `ddos_tester.cjs` script for simulating DDoS attacks and monitoring targ
 node ddos_tester.cjs
 ```
 
-Follow the prompts to input the hostname or URL you want to analyze. As part of our **NARROW-RECON** approach, these scripts focus on pinpointing critical security vulnerabilities efficiently.
+Run the `fetchSpiderfootData.cjs` script to fetch data from SpiderFoot scans and organize them into distinct log files:
+
+```bash
+node fetchSpiderfootData.cjs
+```
 
 ### DDoS Tester Customization
 
@@ -136,6 +143,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **checkUrl.cjs**: Identifies points where WAF rules/regex might block requests by using URL shortening and detects points that return a 500 status or are dropped by the WAF.
 - **dom_xss_detector.cjs**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
 - **ddos_tester.cjs**: Simulates DDoS attacks and monitors target's response time, providing detailed logs and customizable payloads.
+- **fetchSpiderfootData.cjs**: Fetches data from SpiderFoot scans, organizes it into distinct log files, and ensures unique entries in each file as part of the **WIDE-RECON** approach.
 
 ## Contributing
 
