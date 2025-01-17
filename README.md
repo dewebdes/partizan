@@ -1,9 +1,3 @@
-Got it! Let's update the README to include instructions on how to customize the browser configuration for scripts that use Playwright.
-
-Here's the revised README:
-
----
-
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
