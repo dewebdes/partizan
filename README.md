@@ -24,6 +24,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
 - **Network Packet Analysis**: Logs, minimizes, and analyzes network packets to identify unique and potentially harmful requests.
 - **SpiderFoot Data Fetching**: Fetches data from SpiderFoot scans and organizes it into distinct log files as part of our **WIDE-RECON** approach.
+- **Screenshot Capture**: Captures screenshots of specified hosts and saves them for further analysis.
 
 ## Getting Started
 
@@ -100,6 +101,12 @@ Run the `fetchSpiderfootData.cjs` script to fetch data from SpiderFoot scans and
 node fetchSpiderfootData.cjs
 ```
 
+Run the `capture_screenshots.cjs` script to capture screenshots of specified hosts:
+
+```bash
+node capture_screenshots.cjs
+```
+
 ### DDoS Tester Customization
 
 You can customize the `ddos_tester.cjs` script by modifying the payloads and other settings.
@@ -144,6 +151,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **dom_xss_detector.cjs**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
 - **ddos_tester.cjs**: Simulates DDoS attacks and monitors target's response time, providing detailed logs and customizable payloads.
 - **fetchSpiderfootData.cjs**: Fetches data from SpiderFoot scans, organizes it into distinct log files, and ensures unique entries in each file as part of the **WIDE-RECON** approach.
+- **capture_screenshots.cjs**: Captures screenshots of specified hosts and saves them for further analysis.
 
 ## Contributing
 
