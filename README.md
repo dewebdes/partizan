@@ -1,3 +1,9 @@
+Got it! Let's update the README to include instructions on how to customize the browser configuration for scripts that use Playwright.
+
+Here's the revised README:
+
+---
+
 <p align="center">
   <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
 <br>
@@ -25,6 +31,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Network Packet Analysis**: Logs, minimizes, and analyzes network packets to identify unique and potentially harmful requests.
 - **SpiderFoot Data Fetching**: Fetches data from SpiderFoot scans and organizes it into distinct log files as part of our **WIDE-RECON** approach.
 - **Screenshot Capture**: Captures screenshots of specified hosts and saves them for further analysis.
+- **Host List Processing**: Cleans and processes host lists to remove subdomains and duplicates.
 
 ## Getting Started
 
@@ -39,6 +46,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - `readline`
 - `fs`
 - `worker_threads`
+- `parse-domain`
 
 ### Installation
 
@@ -107,6 +115,31 @@ Run the `capture_screenshots.cjs` script to capture screenshots of specified hos
 node capture_screenshots.cjs
 ```
 
+Run the `process_hosts.cjs` script to clean and process host lists:
+
+```bash
+node process_hosts.cjs
+```
+
+### Customizing Browser Configuration
+
+To customize the browser configuration for scripts that use Playwright, you can modify the `executablePath` to specify the path to the browser executable. This is useful if you want to use a specific browser installation, such as Google Chrome.
+
+Here’s an example of how to set the `executablePath` in the Playwright launch options:
+
+```javascript
+const browser = await chromium.launch({
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // Path to the browser executable
+    headless: false, // Set to true if you want to run the browser in headless mode
+    args: [
+        '--no-sandbox',
+        '--ignore-certificate-errors'
+    ]
+});
+```
+
+You can apply this configuration in any script that uses Playwright to launch a browser, such as `browser.cjs`, `capture_screenshots.cjs`, etc.
+
 ### DDoS Tester Customization
 
 You can customize the `ddos_tester.cjs` script by modifying the payloads and other settings.
@@ -152,6 +185,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **ddos_tester.cjs**: Simulates DDoS attacks and monitors target's response time, providing detailed logs and customizable payloads.
 - **fetchSpiderfootData.cjs**: Fetches data from SpiderFoot scans, organizes it into distinct log files, and ensures unique entries in each file as part of the **WIDE-RECON** approach.
 - **capture_screenshots.cjs**: Captures screenshots of specified hosts and saves them for further analysis.
+- **process_hosts.cjs**: Cleans and processes host lists to remove subdomains and duplicates.
 
 ## Contributing
 
