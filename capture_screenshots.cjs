@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const path = require('path');
 const prompts = require('prompts');
 
-async function captureScreenshot(domain, browser) {
+async function captureScreenshot(domain, browser, resolvedHosts) {
     const context = await browser.newContext();
     const page = await context.newPage();
     const url = `http://${domain}`;
@@ -26,6 +26,9 @@ async function captureScreenshot(domain, browser) {
         console.log(`Taking screenshot for: ${domain}`);
         await page.screenshot({ path: filePath });
         console.log(`Captured screenshot for ${domain}`);
+
+        // Add the domain to the resolved hosts list
+        resolvedHosts.add(domain);
     } catch (error) {
         console.log(`Failed to capture screenshot for ${domain}: ${error.message}`);
     } finally {
@@ -50,6 +53,8 @@ async function main() {
 
     console.log(`Number of domains to be processed: ${domains.length}`);
 
+    const resolvedHosts = new Set();
+
     console.log('Launching browser...');
     const browser = await chromium.launch({
         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -64,12 +69,17 @@ async function main() {
     for (const domain of domains) {
         // Debug: Log the domain being processed
         console.log(`Processing domain: ${domain}`);
-        await captureScreenshot(domain, browser);
+        await captureScreenshot(domain, browser, resolvedHosts);
         await new Promise(resolve => setTimeout(resolve, 12000));
     }
 
     await browser.close();
     console.log('Browser closed');
+
+    // Write the resolved hosts to a new file
+    const resolvedHostsFilePath = path.join(path.dirname(filePath), 'resolved_hosts.txt');
+    fs.writeFileSync(resolvedHostsFilePath, Array.from(resolvedHosts).join('\n'), 'utf-8');
+    console.log(`Resolved hosts list saved to: ${resolvedHostsFilePath}`);
 }
 
 main().catch(console.error);
