@@ -26,6 +26,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **SpiderFoot Data Fetching**: Fetches data from SpiderFoot scans and organizes it into distinct log files as part of our **WIDE-RECON** approach.
 - **Screenshot Capture**: Captures screenshots of specified hosts and saves them for further analysis.
 - **Host List Processing**: Cleans and processes host lists to remove subdomains and duplicates.
+- **Random Wordlist Generator**: Creates random wordlists from a main wordlist based on user input, distributing unique words across chunks.
 
 ## Getting Started
 
@@ -115,6 +116,12 @@ Run the `process_hosts.cjs` script to clean and process host lists:
 node process_hosts.cjs
 ```
 
+Run the `randomWordlistGenerator.cjs` script to create random wordlists from a main wordlist:
+
+```bash
+node randomWordlistGenerator.cjs
+```
+
 ### Customizing Browser Configuration
 
 To customize the browser configuration for scripts that use Playwright, you can modify the `executablePath` to specify the path to the browser executable. This is useful if you want to use a specific browser installation, such as Google Chrome.
@@ -180,6 +187,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **fetchSpiderfootData.cjs**: Fetches data from SpiderFoot scans, organizes it into distinct log files, and ensures unique entries in each file as part of the **WIDE-RECON** approach.
 - **capture_screenshots.cjs**: Captures screenshots of specified hosts and saves them for further analysis.
 - **process_hosts.cjs**: Cleans and processes host lists to remove subdomains and duplicates.
+- **randomWordlistGenerator.cjs**: Creates random wordlists from a main wordlist based on user input, distributing unique words across chunks.
 
 ## Contributing
 
