@@ -27,6 +27,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **Screenshot Capture**: Captures screenshots of specified hosts and saves them for further analysis.
 - **Host List Processing**: Cleans and processes host lists to remove subdomains and duplicates.
 - **Random Wordlist Generator**: Creates random wordlists from a main wordlist based on user input, distributing unique words across chunks.
+- **URL Extraction**: Extracts and processes URLs from the specified hostnames for detailed analysis and security checks.
 
 ## Getting Started
 
@@ -122,6 +123,12 @@ Run the `randomWordlistGenerator.cjs` script to create random wordlists from a m
 node randomWordlistGenerator.cjs
 ```
 
+Run the `URL_Extractor.cjs` script to extract and process URLs from specified hostnames:
+
+```bash
+node URL_Extractor.cjs
+```
+
 ### Customizing Browser Configuration
 
 To customize the browser configuration for scripts that use Playwright, you can modify the `executablePath` to specify the path to the browser executable. This is useful if you want to use a specific browser installation, such as Google Chrome.
@@ -188,6 +195,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **capture_screenshots.cjs**: Captures screenshots of specified hosts and saves them for further analysis.
 - **process_hosts.cjs**: Cleans and processes host lists to remove subdomains and duplicates.
 - **randomWordlistGenerator.cjs**: Creates random wordlists from a main wordlist based on user input, distributing unique words across chunks.
+- **URL_Extractor.cjs**: Extracts and processes URLs from specified hostnames for detailed analysis and security checks.
 
 ## Contributing
 
