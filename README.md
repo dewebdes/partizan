@@ -1,11 +1,3 @@
-<p align="center">
-  <img src="https://github.com/dewebdes/partizan/blob/main/image/logo.png" alt="Partizan Logo" width="100" height="100">
-<br>
-<strong align="center"># Partizan</strong>
-</p>
-
-**<u><b>Partizan</b></u>** refers to a member of an armed group formed to fight secretly against an occupying force, often associated with resistance movements and guerrilla warfare. The term has its roots in the **Parthian Empire**, a powerful ancient civilization known for its strategic resistance and formidable warriors. The word embodies the spirit of independence, resistance, and resourcefulness.
-
 # Partizan
 
 Partizan is a robust security tool designed to streamline the detection of dangerous sinks, key terms, and source maps in web applications. Built with efficiency and ease of use in mind, it leverages Playwright to provide comprehensive scanning capabilities. As part of our **NARROW-RECON** methodology, Partizan focuses on precise and targeted reconnaissance to enhance security measures.
@@ -19,6 +11,7 @@ Partizan is a robust security tool designed to streamline the detection of dange
 - **WAF Rule Detection**: Uses URL shortening to identify points where WAF rules/regex might block requests.
 - **DOM XSS Detection**: Identifies DOM-based XSS vulnerabilities by testing URL parameters for reflection in the page content.
 - **DDoS Testing**: Simulates Distributed Denial-of-Service (DDoS) attacks and monitors target's response time.
+- **Unique URLs Filtering**: Filters and groups unique URLs based on similarity.
 - **Comprehensive Logging**: Provides detailed logs of requests and responses.
 - **Customizable Scans**: Easily configure and customize scans according to your needs.
 - **Interested URLs List**: Generates a list of URLs of interest for detailed security checks.
@@ -129,6 +122,12 @@ Run the `URL_Extractor.cjs` script to extract and process URLs from specified ho
 node URL_Extractor.cjs
 ```
 
+Run the `unique-urls.cjs` script to filter and group unique URLs:
+
+```bash
+node unique-urls.cjs
+```
+
 ### Customizing Browser Configuration
 
 To customize the browser configuration for scripts that use Playwright, you can modify the `executablePath` to specify the path to the browser executable. This is useful if you want to use a specific browser installation, such as Google Chrome.
@@ -196,6 +195,7 @@ For detailed guidance on proxy configuration, including cloud worker base proxie
 - **process_hosts.cjs**: Cleans and processes host lists to remove subdomains and duplicates.
 - **randomWordlistGenerator.cjs**: Creates random wordlists from a main wordlist based on user input, distributing unique words across chunks.
 - **URL_Extractor.cjs**: Extracts and processes URLs from specified hostnames for detailed analysis and security checks.
+- **unique-urls.cjs**: Filters and groups unique URLs based on similarity to identify distinct URLs.
 
 ## Contributing
 
