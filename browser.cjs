@@ -248,7 +248,12 @@ if (isMainThread) {
 
         const browser = await chromium.launch({
             executablePath: chromePath,
-            headless: false
+            headless: false,
+            args: [
+                '--no-sandbox',
+                '--proxy-server=http://127.0.0.1:8080',
+                '--ignore-certificate-errors'
+            ]
         });
 
         const context = await browser.newContext({
@@ -266,44 +271,7 @@ if (isMainThread) {
             }
         });
 
-        const page = await context.newPage();
-
-        const sourceMapSchemes = [
-            '{filename}.map', '{filename}.js.map', '{filename}.min.map', '{filename}.min.js.map', '{filename}-debug.map',
-            '{filename}.bundle.map', '{filename}.bundle.js.map', '{filename}.bundle.min.map', '{filename}.bundle.min.js.map',
-            '{filename}-dev.map', '{filename}-dev.js.map', '{filename}-prod.map', '{filename}.prod.map', '{filename}.prod.js.map',
-            '{filename}.production.map', '{filename}.production.js.map', '{filename}.development.map', '{filename}.development.js.map',
-            '{filename}.test.map', '{filename}.test.js.map'
-        ];
-
-        const isSourceMapAvailable = async (url) => {
-            try {
-                const response = await (await import('node-fetch')).default(url, { headers: { 'Cache-Control': 'no-cache' } });
-                return response.ok;
-            } catch (error) {
-                console.error(`Error fetching source map at ${url}: ${error.message}`);
-                return false;
-            }
-        };
-
-        const fuzzSourceMapUrls = async (scriptUrl, schemes) => {
-            const urlObj = new URL(scriptUrl);
-            const filename = path.basename(urlObj.pathname, path.extname(urlObj.pathname));
-
-            for (const scheme of schemes) {
-                const sourceMapUrl = new URL(scheme.replace('{filename}', filename), scriptUrl).toString();
-                if (await isSourceMapAvailable(sourceMapUrl)) {
-                    sourceMapLog.push({ scriptUrl, sourceMapUrl });
-                }
-            }
-        };
-
-        const logSourceMap = (scriptUrl, sourceMapUrl) => {
-            console.log(`Discovered source map for script: ${scriptUrl}\nSource map URL: ${sourceMapUrl}\n`);
-            sourceMapLog.push({ scriptUrl, sourceMapUrl });
-        };
-
-        page.on('request', request => {
+        const handleRequest = (request) => {
             const url = request.url();
             if (url.includes(hostname)) {
                 const strippedUrl = removeProtocolAndHost(url);
@@ -325,7 +293,7 @@ if (isMainThread) {
                 urlToRequestIndexMap[strippedUrl] = requests.length - 1;
 
                 if (request.resourceType() === 'script' || request.resourceType() === 'document') {
-                    request.response().then(async response => {
+                    request.response().then(async (response) => {
                         const content = await response.text();
                         detectKeyTerms(content, request.url()); // Invoke detectKeyTerms here
                         dangerousSinks.forEach(sink => {
@@ -351,15 +319,25 @@ if (isMainThread) {
                     });
                 }
             }
-        });
+        };
 
-        page.on('response', async response => {
+        const handleResponse = (response) => {
             const url = response.url();
             if (url.includes(hostname)) {
                 const strippedUrl = removeProtocolAndHost(url);
                 console.log(`Response: ${strippedUrl}`);
             }
-        });
+        };
+
+        const setupPageListeners = (page) => {
+            page.on('request', handleRequest);
+            page.on('response', handleResponse);
+        };
+
+        const page = await context.newPage();
+        setupPageListeners(page);
+
+        context.on('page', setupPageListeners);
 
         try {
             await page.goto(startupAddress);
@@ -380,7 +358,6 @@ if (isMainThread) {
                 parentPort.postMessage({ type: 'save', urlLog, requests, sinkLog, sourceMapLog, keyTermLog, urlToRequestIndexMap });
             }
         });
-
     };
 
 
