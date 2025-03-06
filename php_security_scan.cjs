@@ -42,15 +42,37 @@ function searchFolderForKeywords(folderPath, keywords, outputFile, basePath) {
                     keywords.forEach((keyword) => {
                         if (data.includes(keyword)) {
                             const relativePath = path.relative(basePath, filePath); // Get relative path
-                            const finding = `Found "${keyword}" in file: ${relativePath}\n`;
-                            console.log(finding); // Display on console
-                            fs.appendFileSync(outputFile, finding); // Save to file
+                            fs.appendFileSync(outputFile, `${keyword}|${relativePath}\n`, 'utf8');
                         }
                     });
                 });
             }
         });
     });
+}
+
+// Function to chunk results in the log file
+function writeChunksToLog(keywords, folderPath, outputFile) {
+    if (fs.existsSync(outputFile)) {
+        // Create a new file to store results chunked by keywords
+        const chunkedOutput = path.join(folderPath, 'chunked_scan_results.txt');
+        fs.writeFileSync(chunkedOutput, '', 'utf8'); // Clear file before writing chunks
+
+        keywords.forEach((keyword) => {
+            const findings = fs
+                .readFileSync(outputFile, 'utf8')
+                .split('\n')
+                .filter((line) => line.startsWith(`${keyword}|`))
+                .map((line) => line.split('|')[1]); // Extract only the file paths
+
+            if (findings.length > 0) {
+                const chunk = `=== Results for "${keyword}" ===\n` + findings.join('\n') + '\n\n';
+                fs.appendFileSync(chunkedOutput, chunk, 'utf8');
+            }
+        });
+
+        console.log(`Chunked results saved to: ${chunkedOutput}`);
+    }
 }
 
 // Main script logic
@@ -71,16 +93,17 @@ function searchFolderForKeywords(folderPath, keywords, outputFile, basePath) {
     const folderPath = await getFolderLocation();
 
     if (fs.existsSync(folderPath) && fs.lstatSync(folderPath).isDirectory()) {
-        const outputFile = path.join(folderPath, 'scan_results.txt');
+        const outputFile = path.join(folderPath, 'scan_results_raw.txt');
         console.log(`Scanning folder: ${folderPath}`);
-        console.log(`Findings will be saved in: ${outputFile}`);
+        console.log(`Raw findings will be saved in: ${outputFile}`);
 
         // Clear previous results if the file exists
         if (fs.existsSync(outputFile)) {
             fs.unlinkSync(outputFile); // Remove the old file to start fresh
         }
 
-        searchFolderForKeywords(folderPath, keywords, outputFile, folderPath); // Pass base path
+        searchFolderForKeywords(folderPath, keywords, outputFile, folderPath);
+        setTimeout(() => writeChunksToLog(keywords, folderPath, outputFile), 5000); // Delay for log creation
     } else {
         console.error('Invalid folder path. Please enter a valid directory.');
     }
